@@ -1,5 +1,9 @@
 public class Stack {
-
+	
+	/*Node Class
+	 * Stores data as an object
+	 * Creates a pointer to the next node
+	 */
 	private class Node{
 
 		private Object object;
@@ -20,9 +24,8 @@ public class Stack {
 		//Getter Methods
 		public Node getNext() {return next;}
 		public Object getObject () {return object;}
-
 	}
-
+	
 	private Node head, tail;
 	private int length;
 
@@ -31,13 +34,15 @@ public class Stack {
 		tail = head;
 		length = 0;
 	}
-	private void increaseLength(){
+	
+	//Inserts the second object after the first
+	private void insertAfter(Node first, Node second){
+		first.setNext(second);
+		tail = second;
 		length++;
 	}
-	private void decreaseLength(){
-		length--;
-	}
 	
+	//Returns true if list is empty
 	public boolean isEmpty(){
 		if (length == 0){
 			return true;
@@ -48,37 +53,25 @@ public class Stack {
 	public int length(){
 		return length;
 	}
-	
-	private void addToFront(Node node){
-		if (isEmpty()){
-			head.setNext(node);
-			tail = node;
-			increaseLength();
-		}
-	}
-	
-	private void addToEnd(Node node){
-			tail.setNext(node);
-			tail = tail.getNext();
-			increaseLength();
-	}
-	
-	
+
+	//Inserts an object at the end of the list
 	public void push(int objToPush){
 		if (isEmpty()){
-			addToFront(new Node(objToPush));
+			insertAfter(head, new Node(objToPush));
 		} else {
-			addToEnd(new Node(objToPush));
+			insertAfter(tail, new Node(objToPush));
 		}	
 	}
 	
+	//Removes object from the front of the list
 	private Node removeFromFront(){
 		Node firstElement = head.getNext();
 		head.setNext(null);
-		decreaseLength();
+		length--;
 		return firstElement;
 	}
-	
+
+	//Removes object from the end of the list
 	private Node removeFromEnd(){
 		Node lastElement = tail;
 
@@ -88,11 +81,13 @@ public class Stack {
 		}
 		tail = iterator;
 		iterator.setNext(null);
-		decreaseLength();
+		length--;
 
 		return lastElement;
 	}
 	
+	//Removes and returns an object from the end of 
+	//the list
 	public Object pop(){
 		if (isEmpty()){
 			throw new IllegalArgumentException("Stack is empty!");
@@ -102,7 +97,5 @@ public class Stack {
 		} else {
 			return removeFromEnd().getObject();
 		}
-	}
-	
-			
+	}		
 }
