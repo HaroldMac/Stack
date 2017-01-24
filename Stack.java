@@ -1,44 +1,59 @@
-public class Stack {
+public class Stack<AnyType> {
 	
 	/*Node Class
 	 * Stores data as an object
 	 * Creates a pointer to the next node
 	 */
-	private class Node{
 
-		private Object object;
-		private Node next;
+	private class Node<AnyType>{
 
-		Node (){
+		private AnyType data;
+		private Node<AnyType> next;
+
+		Node(){
 			next = null;
 		}
 
-		Node(Object obj){
-			object = obj;
+		Node(AnyType t){
+			data = t;
 			next = null;
 		}
 
 		//Setter Methods
-		public void setNext (Node n){next = n;}
+		public void setNext (Node<AnyType> n){next = n;}
 
 		//Getter Methods
-		public Node getNext() {return next;}
-		public Object getObject () {return object;}
+		public Node<AnyType> getNext() {return next;}
+		public AnyType getData () {return data;}
 	}
 	
-	private Node head, tail;
+
+	private Node<AnyType> head, tail;
 	private int length;
 
 	Stack(){
-		head = new Node();
+		head = new Node<AnyType>();
 		tail = head;
 		length = 0;
 	}
 	
-	//Inserts the second object after the first
-	private void insertAfter(Node first, Node second){
-		first.setNext(second);
-		tail = second;
+	/*Checks if the first node has a node after it.
+	 * If a next node exits, it places the second node after the first, than attaches the other nodes to 
+	 * the second. 
+	 *If a next node does not exist, it places teh second node
+	 *after the first node and updates the tail.
+	 *Then it increase the length of the list by 1
+	 */
+	
+	private void insertAfter(Node<AnyType> first, Node<AnyType> second){
+		if (first.getNext() == null){
+			first.setNext(second);
+			tail = second;
+		} else  {
+			Node<AnyType> nextNode = first.getNext();
+			first.setNext(second);
+			second.setNext(nextNode);
+		}
 		length++;
 	}
 	
@@ -50,32 +65,33 @@ public class Stack {
 		return false;
 	}
 	
+	//Returns the length of the list.
 	public int length(){
 		return length;
 	}
 
 	//Inserts an object at the end of the list
-	public void push(int objToPush){
+	public void push(AnyType objToPush){
 		if (isEmpty()){
-			insertAfter(head, new Node(objToPush));
+			insertAfter(head, new Node<AnyType>(objToPush));
 		} else {
-			insertAfter(tail, new Node(objToPush));
+			insertAfter(tail, new Node<AnyType>(objToPush));
 		}	
 	}
 	
 	//Removes object from the front of the list
-	private Node removeFromFront(){
-		Node firstElement = head.getNext();
+	private Node<AnyType> removeFromFront(){
+		Node<AnyType> firstElement = head.getNext();
 		head.setNext(null);
 		length--;
 		return firstElement;
 	}
 
 	//Removes object from the end of the list
-	private Node removeFromEnd(){
-		Node lastElement = tail;
+	private Node<AnyType> removeFromEnd(){
+		Node<AnyType> lastElement = tail;
 
-		Node iterator = head;
+		Node<AnyType> iterator = head;
 		while(iterator.getNext().getNext() != null){
 			iterator = iterator.getNext();
 		}
@@ -88,14 +104,14 @@ public class Stack {
 	
 	//Removes and returns an object from the end of 
 	//the list
-	public Object pop(){
+	public AnyType pop(){
 		if (isEmpty()){
 			throw new IllegalArgumentException("Stack is empty!");
 		}
 		if (length == 1){
-			return removeFromFront().getObject();
+			return (AnyType) removeFromFront().getData();
 		} else {
-			return removeFromEnd().getObject();
+			return (AnyType) removeFromEnd().getData();
 		}
-	}		
+	}
 }
