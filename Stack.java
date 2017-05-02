@@ -1,43 +1,61 @@
-public class Stack {
+public class Stack<AnyType> {
+	
+	/**Node Class
+	 * Stores data as an object
+	 * Creates a pointer to the next node
+	 */
 
-	private class Node{
+	@SuppressWarnings("hiding")
+	private class Node<AnyType>{
 
-		private Object object;
-		private Node next;
+		private AnyType data;
+		private Node<AnyType> next;
 
-		Node (){
+		Node(){
 			next = null;
 		}
 
-		Node(Object obj){
-			object = obj;
+		Node(AnyType t){
+			data = t;
 			next = null;
 		}
 
 		//Setter Methods
-		public void setNext (Node n){next = n;}
+		public void setNext (Node<AnyType> n){next = n;}
 
 		//Getter Methods
-		public Node getNext() {return next;}
-		public Object getObject () {return object;}
-
+		public Node<AnyType> getNext() {return next;}
+		public AnyType getData () {return data;}
 	}
+	
 
-	private Node head, tail;
+	private Node<AnyType> head, tail;
 	private int length;
 
 	Stack(){
-		head = new Node();
+		head = new Node<AnyType>();
 		tail = head;
 		length = 0;
 	}
-	private void increaseLength(){
+	
+	/**Checks if the first node has a node after it.
+	 * If a next node exits, it places the second node after the first, than attaches the other nodes to 
+	 * the second. 
+	 *If a next node does not exist, it places the second node
+	 *after the first node and updates the tail.
+	 *Then it increase the length of the list by 1
+	 */
+	
+	private void insertAfter(Node<AnyType> first, Node<AnyType> second){
+		first.setNext(second);
+		tail = second;
 		length++;
 	}
-	private void decreaseLength(){
-		length--;
-	}
 	
+	/**Returns true if list is empty
+	 * 
+	 * @return true if list is empty, false otherwise
+	 */
 	public boolean isEmpty(){
 		if (length == 0){
 			return true;
@@ -45,64 +63,67 @@ public class Stack {
 		return false;
 	}
 	
+	/**Returns the length of the list.
+	 * 
+	 * @return length of the list
+	 */
 	public int length(){
 		return length;
 	}
-	
-	private void addToFront(Node node){
+
+	/** Inserts an object at the end of the list
+	 * 
+	 * @param objToPush Takes object defined by stack<type>
+	 */
+	public void push(AnyType objToPush){
 		if (isEmpty()){
-			head.setNext(node);
-			tail = node;
-			increaseLength();
-		}
-	}
-	
-	private void addToEnd(Node node){
-			tail.setNext(node);
-			tail = tail.getNext();
-			increaseLength();
-	}
-	
-	
-	public void push(int objToPush){
-		if (isEmpty()){
-			addToFront(new Node(objToPush));
+			insertAfter(head, new Node<AnyType>(objToPush));
 		} else {
-			addToEnd(new Node(objToPush));
+			insertAfter(tail, new Node<AnyType>(objToPush));
 		}	
 	}
 	
-	private Node removeFromFront(){
-		Node firstElement = head.getNext();
+	/**Removes object from the front of the list
+	 * 
+	 * @return the first object on the stack
+	 */
+	private Node<AnyType> removeFromFront(){
+		Node<AnyType> firstElement = head.getNext();
 		head.setNext(null);
-		decreaseLength();
+		length--;
 		return firstElement;
 	}
-	
-	private Node removeFromEnd(){
-		Node lastElement = tail;
 
-		Node iterator = head;
+	/**Removes object from the end of the list
+	 * 
+	 * @return the last object on the stack
+	 */
+	private Node<AnyType> removeFromEnd(){
+		Node<AnyType> lastElement = tail;
+
+		Node<AnyType> iterator = head;
 		while(iterator.getNext().getNext() != null){
 			iterator = iterator.getNext();
 		}
 		tail = iterator;
 		iterator.setNext(null);
-		decreaseLength();
+		length--;
 
 		return lastElement;
 	}
 	
-	public Object pop(){
+	/**Removes and returns an object from the end of the list
+	 * 
+	 * @return the top element on the stack
+	 */
+	public AnyType pop(){
 		if (isEmpty()){
 			throw new IllegalArgumentException("Stack is empty!");
 		}
 		if (length == 1){
-			return removeFromFront().getObject();
+			return (AnyType) removeFromFront().getData();
 		} else {
-			return removeFromEnd().getObject();
+			return (AnyType) removeFromEnd().getData();
 		}
 	}
-	
-			
 }
