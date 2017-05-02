@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 public class Stack<AnyType> {
 	
 	/**Node Class
@@ -128,7 +127,7 @@ public class Stack<AnyType> {
 		}
 	}
 }
-=======
+
 public class Stack<AnyType> {
 	
 	/*Node Class
@@ -246,4 +245,3 @@ public class Stack<AnyType> {
 		}
 	}
 }
->>>>>>> refs/remotes/origin/master
